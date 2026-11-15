@@ -35,6 +35,10 @@ public class InvestmentAccount extends Account implements InterestCalc {
         return getBalance() * interestRate;
     }
 
+    public void payInterest() {
+        deposit(calculateInterest());
+    }
+
     public double getInterestRate() { return interestRate; }
     public double getMinimumOpeningDeposit() { return minimumOpeningDeposit; }
 }
