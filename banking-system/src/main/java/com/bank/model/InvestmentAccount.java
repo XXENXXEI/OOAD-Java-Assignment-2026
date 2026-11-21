@@ -2,7 +2,6 @@ package com.bank.model;
 
 public class InvestmentAccount extends Account implements InterestCalc {
 
-    // 5% monthly = 0.05 as a decimal
     private double interestRate = 0.05;
     private double minimumOpeningDeposit = 500.00;
 
@@ -20,7 +19,7 @@ public class InvestmentAccount extends Account implements InterestCalc {
         return openingDeposit;
     }
 
-    // Investment accounts allow withdrawals, but not more than the balance
+    // investment accounts allow withdrawals, but not more than the balance
     @Override
     public boolean withdraw(double amount) {
         if (amount > 0 && amount <= getBalance()) {

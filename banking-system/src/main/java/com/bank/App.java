@@ -1,13 +1,9 @@
 package com.bank;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import com.bank.util.DatabaseSetup;
+
+public class App {
+    public static void main(String[] args) {
+        DatabaseSetup.createTables();
     }
 }
