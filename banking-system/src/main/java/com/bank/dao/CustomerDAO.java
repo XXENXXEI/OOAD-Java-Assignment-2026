@@ -1,0 +1,34 @@
+package com.bank.dao;
+
+import com.bank.model.Customer;
+import com.bank.util.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public class CustomerDAO {
+
+    // Saves a new customer into the customers table
+    public void save(Customer customer) {
+        String sql = "INSERT INTO customers "
+                   + "(name, date_of_birth, email, phone_number, address, password) "
+                   + "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getDateOfBirth());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, customer.getPhoneNumber());
+            ps.setString(5, customer.getAddress());
+            ps.setString(6, customer.getPassword());
+
+            ps.executeUpdate();
+            System.out.println("Customer saved: " + customer.getName());
+
+        } catch (Exception e) {
+            System.out.println("Could not save customer: " + e.getMessage());
+        }
+    }
+}
