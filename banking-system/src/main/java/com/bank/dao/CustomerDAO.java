@@ -3,12 +3,14 @@ package com.bank.dao;
 import com.bank.model.Customer;
 import com.bank.util.DatabaseConnection;
 
+import java.sql.ResultSet;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class CustomerDAO {
 
-    // Saves a new customer into the customers table
+    // saves a new customer into the customers table
     public void save(Customer customer) {
         String sql = "INSERT INTO customers "
                    + "(name, date_of_birth, email, phone_number, address, password) "
@@ -30,5 +32,31 @@ public class CustomerDAO {
         } catch (Exception e) {
             System.out.println("Could not save customer: " + e.getMessage());
         }
+    }
+
+    // looks up a customer by email, Returns null if not found
+    public Customer findByEmail(String email) {
+        String sql = "SELECT * FROM customers WHERE email = ?";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Customer(
+                    rs.getString("name"),
+                    rs.getString("date_of_birth"),
+                    rs.getString("email"),
+                    rs.getString("phone_number"),
+                    rs.getString("address"),
+                    rs.getString("password"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Could not find customer: " + e.getMessage());
+        }
+        return null;
     }
 }
