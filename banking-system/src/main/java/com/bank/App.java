@@ -10,8 +10,9 @@ public class App {
     public static void main(String[] args) {
         DatabaseSetup.createTables();
 
-          Customer billy = new CustomerDAO().findByEmail("Billy@gmail.com");
+        Customer billy = new CustomerDAO().findByEmail("Billy@gmail.com");
         SavingsAccount savings = new SavingsAccount("S001", "Main", billy, 1000);
-        new AccountDAO().save(savings);
+        savings.deposit(500);
+        new AccountDAO().updateBalance(savings);
     }
 }

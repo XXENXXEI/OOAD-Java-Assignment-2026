@@ -57,4 +57,22 @@ public class AccountDAO {
             System.out.println("Could not save account: " + e.getMessage());
         }
     }
+
+        // Writes the account's current balance back to the database
+    public void updateBalance(Account account) {
+        String sql = "UPDATE accounts SET balance = ? WHERE account_number = ?";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setDouble(1, account.getBalance());
+            ps.setString(2, account.getAccountNumber());
+
+            ps.executeUpdate();
+            System.out.println("Balance updated: " + account.getAccountNumber());
+
+        } catch (Exception e) {
+            System.out.println("Could not update balance: " + e.getMessage());
+        }
+    }
 }
