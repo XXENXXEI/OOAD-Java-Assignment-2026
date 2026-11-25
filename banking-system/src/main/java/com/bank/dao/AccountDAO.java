@@ -1,6 +1,10 @@
 package com.bank.dao;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import com.bank.model.Account;
+import com.bank.model.Customer;
 import com.bank.model.ChequeAccount;
 import com.bank.model.InvestmentAccount;
 import com.bank.model.SavingsAccount;
@@ -74,5 +78,42 @@ public class AccountDAO {
         } catch (Exception e) {
             System.out.println("Could not update balance: " + e.getMessage());
         }
+    }
+
+        // Loads all accounts that belong to this customer
+    public List<Account> findByCustomer(Customer customer) {
+        List<Account> accounts = new ArrayList<>();
+
+        String sql = "SELECT * FROM accounts WHERE customer_id = "
+                   + "(SELECT customer_id FROM customers WHERE email = ?)";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, customer.getEmail());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String number = rs.getString("account_number");
+                String branch = rs.getString("bank_branch");
+                double balance = rs.getDouble("balance");
+                String type = rs.getString("account_type");
+
+                if (type.equals("SAVINGS")) {
+                    accounts.add(new SavingsAccount(number, branch, customer, balance));
+                } else if (type.equals("INVESTMENT")) {
+                    accounts.add(new InvestmentAccount(number, branch, customer, balance));
+                } else {
+                    accounts.add(new ChequeAccount(number, branch, customer, balance,
+                            rs.getString("employer_name"),
+                            rs.getString("employer_account_number"),
+                            rs.getString("employer_address")));
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Could not load accounts: " + e.getMessage());
+        }
+        return accounts;
     }
 }

@@ -1,5 +1,7 @@
 package com.bank;
 
+import com.bank.model.Account;
+import java.util.List;
 import com.bank.dao.CustomerDAO;
 import com.bank.model.Customer;
 import com.bank.util.DatabaseSetup;
@@ -11,8 +13,9 @@ public class App {
         DatabaseSetup.createTables();
 
         Customer billy = new CustomerDAO().findByEmail("Billy@gmail.com");
-        SavingsAccount savings = new SavingsAccount("S001", "Main", billy, 1000);
-        savings.deposit(500);
-        new AccountDAO().updateBalance(savings);
+        List<Account> accounts = new AccountDAO().findByCustomer(billy);
+        for (Account a : accounts) {
+            System.out.println(a.getAccountNumber() + " balance: " + a.getBalance());
+        }
     }
 }
