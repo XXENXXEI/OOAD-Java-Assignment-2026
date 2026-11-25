@@ -59,4 +59,20 @@ public class CustomerDAO {
         }
         return null;
     }
+
+        // will remove a customer from the database
+    public void delete(String email) {
+        String sql = "DELETE FROM customers WHERE email = ?";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.executeUpdate();
+            System.out.println("Customer deleted: " + email);
+
+        } catch (Exception e) {
+            System.out.println("Could not delete customer: " + e.getMessage());
+        }
+    }
 }

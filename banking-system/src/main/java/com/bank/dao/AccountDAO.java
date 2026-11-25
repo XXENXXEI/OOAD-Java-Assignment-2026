@@ -80,7 +80,7 @@ public class AccountDAO {
         }
     }
 
-        // Loads all accounts that belong to this customer
+        // loads accounts that belong to this specific customer
     public List<Account> findByCustomer(Customer customer) {
         List<Account> accounts = new ArrayList<>();
 
@@ -115,5 +115,21 @@ public class AccountDAO {
             System.out.println("Could not load accounts: " + e.getMessage());
         }
         return accounts;
+    }
+
+        // removes an account from the database
+    public void delete(String accountNumber) {
+        String sql = "DELETE FROM accounts WHERE account_number = ?";
+
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, accountNumber);
+            ps.executeUpdate();
+            System.out.println("Account deleted: " + accountNumber);
+
+        } catch (Exception e) {
+            System.out.println("Could not delete account: " + e.getMessage());
+        }
     }
 }
