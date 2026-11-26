@@ -1,5 +1,6 @@
 package com.bank;
 
+import com.bank.controller.CustomerController;
 import com.bank.model.SavingsAccount;
 import com.bank.model.Account;
 import java.util.List;
@@ -13,10 +14,13 @@ public class App {
     public static void main(String[] args) {
         DatabaseSetup.createTables();
 
-        Customer billy = new CustomerDAO().findByEmail("Billy@gmail.com");
-        SavingsAccount temp = new SavingsAccount("TEMP1", "Main", billy, 100);
-        AccountDAO dao = new AccountDAO();
-        dao.save(temp);
-        dao.delete("TEMP1");
+        CustomerController controller = new CustomerController();
+        try {
+            controller.register("Thato", "2005-03-14", "thato@mail.com",
+                                "71234567", "Gaborone", "abc");
+            System.out.println("Registered!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
