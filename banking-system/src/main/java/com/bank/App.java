@@ -14,12 +14,12 @@ public class App {
     public static void main(String[] args) {
         DatabaseSetup.createTables();
 
-        CustomerController controller = new CustomerController();
+         CustomerController controller = new CustomerController();
         try {
-            controller.register("Thato", "2005-03-14", "thato@mail.com",
-                                "71234567", "Gaborone", "abc");
-            System.out.println("Registered!");
-        } catch (IllegalArgumentException e) {
+            Customer c = controller.login("bigboss@mail.com", "pass123");
+            System.out.println("Welcome, " + c.getName());
+        } 
+        catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

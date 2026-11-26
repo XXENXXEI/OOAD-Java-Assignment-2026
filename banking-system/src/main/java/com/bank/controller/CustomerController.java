@@ -29,4 +29,18 @@ public class CustomerController {
         customerDAO.save(customer);
         return customer;
     }
+
+        // will check the email and password and return the customer if correct
+    public Customer login(String email, String password) {
+        if (email == null || email.isBlank() || password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Enter your email and password");
+        }
+
+        Customer customer = customerDAO.findByEmail(email);
+
+        if (customer == null || !customer.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Wrong email or password");
+        }
+        return customer;
+    }
 }
