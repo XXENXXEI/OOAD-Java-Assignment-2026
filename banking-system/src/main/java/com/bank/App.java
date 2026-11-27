@@ -1,5 +1,6 @@
 package com.bank;
 
+import com.bank.controller.AccountController;
 import com.bank.controller.CustomerController;
 import com.bank.model.SavingsAccount;
 import com.bank.model.Account;
@@ -14,12 +15,12 @@ public class App {
     public static void main(String[] args) {
         DatabaseSetup.createTables();
 
-         CustomerController controller = new CustomerController();
+        Customer thato = new CustomerDAO().findByEmail("thato@mail.com");
+        AccountController controller = new AccountController();
         try {
-            Customer c = controller.login("bigboss@mail.com", "pass123");
-            System.out.println("Welcome, " + c.getName());
-        } 
-        catch (IllegalArgumentException e) {
+            controller.openAccount(thato, "INVESTMENT", "I001", "Main", 600, null, null, null);
+            System.out.println("Opened!");
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
