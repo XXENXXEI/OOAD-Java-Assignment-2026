@@ -17,11 +17,7 @@ public class App {
 
         Customer thato = new CustomerDAO().findByEmail("thato@mail.com");
         AccountController controller = new AccountController();
-        try {
-            controller.openAccount(thato, "INVESTMENT", "I001", "Main", 600, null, null, null);
-            System.out.println("Opened!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        controller.deposit(thato, "I001", 400);
+        controller.payInterest(thato);
     }
 }

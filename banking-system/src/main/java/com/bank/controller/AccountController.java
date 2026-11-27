@@ -42,4 +42,37 @@ public class AccountController {
         accountDAO.save(account);
         return account;
     }
+
+        // finds one of the customer's accounts by its number
+    private Account findAccount(Customer customer, String accountNumber) {
+        for (Account a : accountDAO.findByCustomer(customer)) {
+            if (a.getAccountNumber().equals(accountNumber)) {
+                return a;
+            }
+        }
+        throw new IllegalArgumentException("Account not found");
+    }
+
+    // adds money to an account and saves the new balance
+    public void deposit(Customer customer, String accountNumber, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit must be more than zero");
+        }
+        Account account = findAccount(customer, accountNumber);
+        account.deposit(amount);
+        accountDAO.updateBalance(account);
+    }
+
+    // pays interest on every interest related account the customer has
+    public void payInterest(Customer customer) {
+        for (Account a : accountDAO.findByCustomer(customer)) {
+            if (a instanceof SavingsAccount) {
+                ((SavingsAccount) a).payInterest();
+                accountDAO.updateBalance(a);
+            } else if (a instanceof InvestmentAccount) {
+                ((InvestmentAccount) a).payInterest();
+                accountDAO.updateBalance(a);
+            }
+        }
+    }
 }
